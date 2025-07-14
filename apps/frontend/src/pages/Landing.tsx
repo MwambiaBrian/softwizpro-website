@@ -41,7 +41,7 @@ export default function LandingPage() {
         style={{
           backgroundImage: `
             linear-gradient(rgba(0, 0, 0, 0.5), #009688),
-            url('https://www.transparenttextures.com/patterns/dark-mosaic.png')
+            url('https://info.wealthcounsel.com/hs-fs/hubfs/Blog_Header.png?width=8400&name=Blog_Header.png')
           `,
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
