@@ -1,0 +1,40 @@
+.navbar .nav-link {
+  transition: color 0.3s, border-bottom 0.3s;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link.active {
+  color: #ffa500 !important; /* Orange on hover/active */
+  border-bottom: 2px solid #ffa500;
+}
+
+.btn-primary,
+.btn-orange {
+  background-color: #ffa500;
+  border-color: #ffa500;
+  color: white;
+}
+
+.btn-primary:hover,
+.btn-orange:hover {
+  background-color: #e69500;
+  border-color: #e69500;
+}
+
+.section-dark {
+  background-color: #000;
+  color: white;
+  padding: 60px 0;
+}
+
+.section-cadet {
+  background-color: #5f9ea0;
+  color: white;
+  padding: 60px 0;
+}
+
+.section-light {
+  background-color: #f8f9fa;
+  color: #333;
+  padding: 60px 0;
+}

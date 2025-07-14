@@ -1,0 +1,42 @@
+body,
+html {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+.admin-header {
+  margin: 0 !important;
+}
+.admin-sidebar {
+  width: 250px;
+  background-color: #2f4f4f; /* cadet blue/dark variant */
+  overflow: hidden; /* Prevent inner scroll */
+  flex-shrink: 0;
+  background-color: #2f4f4f; /* or any dark theme */
+  flex-shrink: 0;
+}
+.admin-dashboard {
+  background-color: #f8f9fa;
+}
+
+.bg-cadet {
+  background-color: #5f9ea0;
+}
+
+.text-orange {
+  color: #ffa500;
+}
+
+.admin-sidebar .nav-link {
+  padding: 0.5rem 0;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.admin-sidebar .nav-link:hover {
+  color: #ffa500;
+}
+
+.admin-header {
+  background-color: #5f9ea0;
+}
