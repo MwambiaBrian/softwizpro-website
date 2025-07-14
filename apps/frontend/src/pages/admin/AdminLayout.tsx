@@ -7,7 +7,7 @@ import {
   FaArrowLeft,
   FaUserCircle,
 } from "react-icons/fa";
-import "./css/admin.css";
+import "./css/Admin.css";
 
 export default function AdminLayout() {
   return (
