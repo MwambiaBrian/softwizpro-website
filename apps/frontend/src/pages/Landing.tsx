@@ -74,12 +74,13 @@ export default function LandingPage() {
         className="py-5 px-3 px-md-5 text-white"
         style={{
           backgroundImage: `
-      linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)),
-      url('https://www.transparenttextures.com/patterns/cubes.png')
-    `,
-          backgroundColor: "cadetblue",
+            linear-gradient(rgba(0, 0, 0, 0.5), #009688),
+            url('https://info.wealthcounsel.com/hs-fs/hubfs/Blog_Header.png?width=8400&name=Blog_Header.png')
+          `,
           backgroundSize: "cover",
-          backgroundRepeat: "repeat",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+          minHeight: "100vh",
         }}
       >
         <div className="container text-center">
@@ -140,12 +141,13 @@ export default function LandingPage() {
         className="py-5 text-white"
         style={{
           backgroundImage: `
-      linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)),
-      url('https://www.transparenttextures.com/patterns/cubes.png')
-    `,
-          backgroundColor: "cadetblue",
+            linear-gradient(rgba(0, 0, 0, 0.5), #009688),
+            url('https://info.wealthcounsel.com/hs-fs/hubfs/Blog_Header.png?width=8400&name=Blog_Header.png')
+          `,
           backgroundSize: "cover",
-          backgroundRepeat: "repeat",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+          minHeight: "100vh",
         }}
       >
         <div className="container">
@@ -214,12 +216,13 @@ export default function LandingPage() {
         className="py-5 text-white"
         style={{
           backgroundImage: `
-      linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)),
-      url('https://www.transparenttextures.com/patterns/cubes.png')
-    `,
-          backgroundColor: "cadetblue",
+            linear-gradient(rgba(0, 0, 0, 0.5), #009688),
+            url('https://info.wealthcounsel.com/hs-fs/hubfs/Blog_Header.png?width=8400&name=Blog_Header.png')
+          `,
           backgroundSize: "cover",
-          backgroundRepeat: "repeat",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+          minHeight: "100vh",
         }}
       >
         <div className="container">
@@ -244,12 +247,13 @@ export default function LandingPage() {
         className="py-5 text-white"
         style={{
           backgroundImage: `
-      linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)),
-      url('https://www.transparenttextures.com/patterns/connected.png')
-    `,
-          backgroundColor: "#0d0d0d",
+            linear-gradient(rgba(0, 0, 0, 0.5), #009688),
+            url('https://info.wealthcounsel.com/hs-fs/hubfs/Blog_Header.png?width=8400&name=Blog_Header.png')
+          `,
           backgroundSize: "cover",
-          backgroundRepeat: "repeat",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+          minHeight: "100vh",
         }}
       >
         <div
