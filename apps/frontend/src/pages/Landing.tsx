@@ -38,7 +38,16 @@ export default function LandingPage() {
       <section
         id="home"
         className="hero-section text-white d-flex align-items-center px-3 px-md-5"
-        style={{ backgroundColor: "#1c1c1c", minHeight: "100vh" }}
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(0, 0, 0, 0.5), #009688),
+            url('https://www.transparenttextures.com/patterns/dark-mosaic.png')
+          `,
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+          minHeight: "100vh",
+        }}
       >
         <div className="overlay"></div>
         <div className="container position-relative">
