@@ -6,7 +6,7 @@ import Landing from "./pages/Landing";
 import ServiceDetail from "./pages/services/ServiceDetails";
 
 import AdminServices from "./pages/admin/Services";
-import AdminCareers from "./pages/admin/Careers";
+
 import AdminLayout from "./pages/admin/AdminLayout";
 import AdminHome from "./pages/admin/Dasboard";
 import JobDetail from "./pages/jobs/JobDetail";

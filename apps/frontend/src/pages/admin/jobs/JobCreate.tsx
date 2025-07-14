@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import type { FormEvent, ChangeEvent } from "react";
+import type { FormEvent } from "react";
 
 import { useNavigate } from "react-router-dom";
 
