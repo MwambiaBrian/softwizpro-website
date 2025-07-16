@@ -1,51 +1,52 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-const dummyServices = [
-  {
-    id: 1,
-    title: "POS",
-    description: "Custom websites for businesses.",
-  },
-  {
-    id: 2,
-    title: "Web Design",
-    description: "Improve search engine ranking.",
-  },
-  {
-    id: 3,
-    title: "Accounting Software",
-    description: "Reliable and scalable hosting.",
-  },
-];
 
 const ServiceList = () => {
   const navigate = useNavigate();
 
-  const handleDelete = (id: any) => {
-    // Simulate delete action
+  const [services, setServices] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/services");
+        setServices(response.data);
+      } catch (err) {
+        setError("Failed to load services.");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchServices();
+  }, []);
+
+  const handleDelete = async (id: string) => {
     if (window.confirm("Are you sure you want to delete this service?")) {
-      console.log(`Deleting service with ID: ${id}`);
-      // You would call your API here
+      try {
+        await axios.delete(`http://localhost:3000/services/${id}`);
+        setServices((prev) => prev.filter((service) => service._id !== id));
+      } catch (err) {
+        alert("Failed to delete service.");
+        console.error(err);
+      }
     }
   };
 
   return (
     <div className="container py-5">
-      <h2
-        className="mb-4 text-orange fw-bold"
-        style={{
-          color: "orange",
-        }}
-      >
+      <h2 className="mb-4 fw-bold" style={{ color: "orange" }}>
         Services Offered Management
       </h2>
 
       <button
         onClick={() => navigate("/admin/services/create")}
         className="btn btn-success mb-3"
-        style={{
-          backgroundColor: "cadetblue",
-        }}
+        style={{ backgroundColor: "cadetblue" }}
       >
         <i className="bi bi-plus-circle me-1"></i> Add New Service
       </button>
@@ -64,32 +65,35 @@ const ServiceList = () => {
               </tr>
             </thead>
             <tbody>
-              {dummyServices.map((service) => (
-                <tr key={service.id}>
-                  <td>{service.title}</td>
-                  <td>{service.description}</td>
-                  <td className="text-center">
-                    <button
-                      onClick={() =>
-                        navigate(`/admin/services/edit/${service.id}`)
-                      }
-                      className="btn btn-sm btn-outline-primary me-2"
-                    >
-                      <i className="bi bi-pencil-square"></i>
-                    </button>
-                    <button
-                      onClick={() => handleDelete(service.id)}
-                      className="btn btn-sm btn-outline-danger"
-                    >
-                      <i className="bi bi-trash"></i>
-                    </button>
+              {services.length === 0 ? (
+                <tr>
+                  <td colSpan={3} className="text-center py-3">
+                    No services available.
                   </td>
                 </tr>
-              ))}
-              {dummyServices.length === 0 && (
-                <tr>
-                  <td className="text-center py-3">No services available.</td>
-                </tr>
+              ) : (
+                services.map((service) => (
+                  <tr key={service._id}>
+                    <td>{service.title}</td>
+                    <td>{service.description}</td>
+                    <td className="text-center">
+                      <button
+                        onClick={() =>
+                          navigate(`/admin/services/edit/${service._id}`)
+                        }
+                        className="btn btn-sm btn-outline-primary me-2"
+                      >
+                        <i className="bi bi-pencil-square"></i>
+                      </button>
+                      <button
+                        onClick={() => handleDelete(service._id)}
+                        className="btn btn-sm btn-outline-danger"
+                      >
+                        <i className="bi bi-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                ))
               )}
             </tbody>
           </table>

@@ -1,8 +1,17 @@
 import { Cursor, useTypewriter } from "react-simple-typewriter";
 import Layout from "../components/Layout";
+import { Modal } from "bootstrap";
 import "./css/LandingPage.css";
 
+declare global {
+  interface Window {
+    bootstrap: any;
+  }
+}
+
 export default function LandingPage() {
+  const isLoggedIn = !!localStorage.getItem("token");
+
   const [text] = useTypewriter({
     words: [
       "Welcome to Softwizpro LTD",
@@ -15,6 +24,7 @@ export default function LandingPage() {
     deleteSpeed: 50,
     delaySpeed: 1500,
   });
+
   const testimonials = [
     {
       name: "Jane Doe",
@@ -32,6 +42,7 @@ export default function LandingPage() {
       text: "Their POS and accounting integration saved us hours each week.",
     },
   ];
+
   return (
     <Layout>
       {/* Hero Section */}
@@ -49,22 +60,20 @@ export default function LandingPage() {
           minHeight: "100vh",
         }}
       >
-        <div className="overlay"></div>
-        <div className="container position-relative">
-          <div className="row justify-content-center text-center">
-            <div className="col-lg-8">
-              <h1 className="display-5 mb-3 text-warning">
-                {text}
-                <Cursor cursorColor="orange" />
-              </h1>
-              <p className="lead text-light">
-                We build world-class software for businesses.
-              </p>
-              <a href="#contact" className="btn btn-orange mt-3">
-                Get Started
-              </a>
-            </div>
-          </div>
+        <div className="container text-center position-relative">
+          <h1 className="display-5 mb-3 text-warning">
+            {text}
+            <Cursor cursorColor="orange" />
+          </h1>
+          <p className="lead text-light">
+            We build world-class software for businesses.
+          </p>
+          <a
+            href={isLoggedIn ? "#services" : "#signup-cta"}
+            className="btn btn-orange mt-3"
+          >
+            Get Started
+          </a>
         </div>
       </section>
 
@@ -80,7 +89,6 @@ export default function LandingPage() {
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center",
-          minHeight: "100vh",
         }}
       >
         <div className="container text-center">
@@ -127,15 +135,10 @@ export default function LandingPage() {
               </div>
             ))}
           </div>
-          <div className="mt-4">
-            <a href="/services" className="btn btn-warning">
-              Show More Services
-            </a>
-          </div>
         </div>
       </section>
 
-      {/* Careers / Job Postings Section */}
+      {/* Careers Section */}
       <section
         id="careers"
         className="py-5 text-white"
@@ -147,7 +150,6 @@ export default function LandingPage() {
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center",
-          minHeight: "100vh",
         }}
       >
         <div className="container">
@@ -161,7 +163,7 @@ export default function LandingPage() {
                 location: "Remote / Nairobi HQ",
                 summary: "React | TypeScript | TailwindCSS",
                 description:
-                  "We’re looking for a Frontend Developer to build stunning UIs. You should have experience with React, component-based architecture, and responsive design best practices.",
+                  "We’re looking for a Frontend Developer to build stunning UIs...",
                 applyLink:
                   "mailto:careers@softwizpro.com?subject=Frontend Developer Application",
               },
@@ -170,7 +172,7 @@ export default function LandingPage() {
                 location: "Nairobi / Hybrid",
                 summary: "Node.js | Express | PostgreSQL",
                 description:
-                  "Join our backend team to create robust APIs and scalable systems. Bonus if you’re familiar with Docker, GraphQL, or microservices architecture.",
+                  "Join our backend team to create robust APIs and scalable systems...",
                 applyLink:
                   "mailto:careers@softwizpro.com?subject=Backend Engineer Application",
               },
@@ -179,7 +181,7 @@ export default function LandingPage() {
                 location: "Remote",
                 summary: "Figma | Prototyping | User Research",
                 description:
-                  "As a UI/UX designer, you’ll collaborate closely with developers and product managers to design intuitive interfaces that drive user engagement.",
+                  "As a UI/UX designer, you’ll collaborate closely with developers...",
                 applyLink:
                   "mailto:careers@softwizpro.com?subject=UIUX Designer Application",
               },
@@ -187,15 +189,13 @@ export default function LandingPage() {
               <div className="col-md-4" key={index}>
                 <div className="bg-dark border border-secondary rounded p-4 h-100 d-flex flex-column shadow-sm">
                   <h5 className="text-warning">{job.title}</h5>
-                  <p className="mb-1">
+                  <p>
                     <strong>Location:</strong> {job.location}
                   </p>
-                  <p className="mb-2 text-muted small">{job.summary}</p>
-                  <details className="mb-3 text-white small">
-                    <summary className="text-warning cursor-pointer">
-                      See More
-                    </summary>
-                    <p className="mt-2">{job.description}</p>
+                  <p className="text-muted small">{job.summary}</p>
+                  <details className="text-white small mb-3">
+                    <summary className="text-warning">See More</summary>
+                    <p>{job.description}</p>
                   </details>
                   <a
                     href={job.applyLink}
@@ -210,6 +210,46 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Signup CTA */}
+      {!isLoggedIn && (
+        <section
+          id="signup-cta"
+          className="position-relative text-white py-4"
+          style={{
+            backgroundImage: `
+              linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 150, 136, 0.8)),
+              url('https://info.wealthcounsel.com/hs-fs/hubfs/Blog_Header.png?width=8400&name=Blog_Header.png')
+            `,
+            backgroundSize: "cover",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+            minHeight: "60vh",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <div className="container text-center">
+            <div
+              className="mx-auto p-4 p-md-5 rounded shadow-lg"
+              style={{
+                maxWidth: "680px",
+                backgroundColor: "rgba(0, 0, 0, 0.5)",
+                border: "1px solid #ffc107",
+              }}
+            >
+              <h2 className="text-warning mb-3">Join the Softwizpro Network</h2>
+              <p>
+                Create an account to unlock tools and opportunities tailored for
+                individuals and businesses.
+              </p>
+              <a href="/register" className="btn btn-warning btn-lg mt-2 px-4">
+                Create an Account
+              </a>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* About Section */}
       <section
         id="about"
@@ -222,10 +262,9 @@ export default function LandingPage() {
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center",
-          minHeight: "100vh",
         }}
       >
-        <div className="container">
+        <div className="container py-5">
           <h2 className="text-center mb-4" style={{ color: "orange" }}>
             About Us
           </h2>
@@ -233,15 +272,12 @@ export default function LandingPage() {
             className="text-center lead"
             style={{ maxWidth: "800px", margin: "0 auto" }}
           >
-            At Softwizpro LTD, we are a dynamic team of developers, designers,
-            and problem solvers. Our mission is to craft innovative digital
-            solutions that empower businesses to thrive in the digital era. With
-            a strong foundation in software engineering and user experience, we
-            transform complex challenges into scalable, elegant systems.
+            At Softwizpro LTD, we are a dynamic team of developers, designers...
           </p>
         </div>
       </section>
-      {/* Testimonials */}
+
+      {/* Testimonials Section */}
       <section
         id="testimonials"
         className="py-5 text-white"
@@ -253,7 +289,6 @@ export default function LandingPage() {
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center",
-          minHeight: "100vh",
         }}
       >
         <div
@@ -270,7 +305,7 @@ export default function LandingPage() {
                 <blockquote className="blockquote text-center text-white px-4">
                   <p className="mb-4 fst-italic">"{t.text}"</p>
                   <footer className="blockquote-footer text-light">
-                    {t.name}, <cite title="Source Title">{t.role}</cite>
+                    {t.name}, <cite>{t.role}</cite>
                   </footer>
                 </blockquote>
               </div>
@@ -282,8 +317,7 @@ export default function LandingPage() {
             data-bs-target="#testimonialCarousel"
             data-bs-slide="prev"
           >
-            <span className="carousel-control-prev-icon" aria-hidden="true" />
-            <span className="visually-hidden">Previous</span>
+            <span className="carousel-control-prev-icon" />
           </button>
           <button
             className="carousel-control-next"
@@ -291,41 +325,41 @@ export default function LandingPage() {
             data-bs-target="#testimonialCarousel"
             data-bs-slide="next"
           >
-            <span className="carousel-control-next-icon" aria-hidden="true" />
-            <span className="visually-hidden">Next</span>
+            <span className="carousel-control-next-icon" />
           </button>
         </div>
+
+        {/* Testimonial Modal Trigger */}
         <div className="mt-5 text-center">
           <h4 className="text-warning mb-3">Submit Your Testimonial</h4>
           <button
             type="button"
             className="btn btn-outline-warning"
-            data-bs-toggle="modal"
-            data-bs-target="#testimonialModal"
+            onClick={() => {
+              if (isLoggedIn) {
+                const modalEl = document.getElementById("testimonialModal");
+                if (modalEl) new Modal(modalEl).show();
+              } else {
+                window.location.href = "/login";
+              }
+            }}
           >
             Open Form
           </button>
         </div>
-        <div
-          className="modal fade"
-          id="testimonialModal"
-          aria-labelledby="testimonialModalLabel"
-          aria-hidden="true"
-        >
+
+        {/* Modal */}
+        <div className="modal fade" id="testimonialModal" tabIndex={-1}>
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content bg-dark text-white border-warning">
               <div className="modal-header border-bottom border-warning">
-                <h5
-                  className="modal-title text-warning"
-                  id="testimonialModalLabel"
-                >
+                <h5 className="modal-title text-warning">
                   Submit Your Testimonial
                 </h5>
                 <button
                   type="button"
                   className="btn-close btn-close-white"
                   data-bs-dismiss="modal"
-                  aria-label="Close"
                 ></button>
               </div>
               <form
@@ -335,30 +369,24 @@ export default function LandingPage() {
                   alert("Thank you for your feedback!");
                 }}
               >
-                <div className="mb-3">
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Your Name"
-                    required
-                  />
-                </div>
-                <div className="mb-3">
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Your Role or Company"
-                    required
-                  />
-                </div>
-                <div className="mb-3">
-                  <textarea
-                    className="form-control"
-                    rows={3}
-                    placeholder="Your Testimonial..."
-                    required
-                  ></textarea>
-                </div>
+                <input
+                  type="text"
+                  className="form-control mb-3"
+                  placeholder="Your Name"
+                  required
+                />
+                <input
+                  type="text"
+                  className="form-control mb-3"
+                  placeholder="Your Role or Company"
+                  required
+                />
+                <textarea
+                  className="form-control mb-3"
+                  rows={3}
+                  placeholder="Your Testimonial..."
+                  required
+                />
                 <div className="text-end">
                   <button
                     type="submit"

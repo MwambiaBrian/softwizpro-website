@@ -25,6 +25,7 @@ export class AuthService {
   async validateUser(username: string, password: string): Promise<User | null> {
     const user = await this.userModel.findOne({ username });
     if (user && (await bcrypt.compare(password, user.password))) {
+      console.log(user);
       return user;
     }
     return null;
@@ -34,6 +35,9 @@ export class AuthService {
     const payload = { username: user.username, sub: user._id, role: user.role };
     return {
       access_token: this.jwtService.sign(payload),
+
+      role: user.role, // 👈 explicitly return role
+      username: user.username,
     };
   }
 }

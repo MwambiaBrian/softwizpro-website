@@ -18,35 +18,34 @@ import AddServiceForm from "./pages/admin/services/AddServiceForm";
 import AdminJobList from "./pages/admin/jobs/JobList";
 import ApplicationsList from "./pages/admin/applications/ApplicationList";
 import JobCreate from "./pages/admin/jobs/JobCreate";
+import { UserProvider } from "./contexts/UserContext";
 
 export default function App() {
   return (
-    <Router>
-      <main className="">
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/services" element={<ServiceList />} />
-          <Route path="/services/create" element={<AddServiceForm />} />
-          <Route path="/services/:serviceId" element={<ServiceDetail />} />
-          <Route path="/careers" element={<JobList />} />
-          <Route path="/careers/:jobId" element={<JobDetail />} />
+    <main className="">
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/services" element={<ServiceList />} />
+        <Route path="/services/create" element={<AddServiceForm />} />
+        <Route path="/services/:serviceId" element={<ServiceDetail />} />
+        <Route path="/careers" element={<JobList />} />
+        <Route path="/careers/:jobId" element={<JobDetail />} />
 
-          {/* Admin Routes */}
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route path="dashboard" element={<AdminHome />} />
-            <Route path="services" element={<AdminServices />} />
-            <Route path="services/create" element={<AddServiceForm />} />
-            <Route path="careers" element={<AdminJobList />} />
-            <Route path="jobs/create" element={<JobCreate />} />
-            <Route
-              path="jobs/:jobId/applications"
-              element={<ApplicationsList />}
-            />
-          </Route>
-        </Routes>
-      </main>
-    </Router>
+        {/* Admin Routes */}
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route path="dashboard" element={<AdminHome />} />
+          <Route path="services" element={<AdminServices />} />
+          <Route path="services/create" element={<AddServiceForm />} />
+          <Route path="careers" element={<AdminJobList />} />
+          <Route path="jobs/create" element={<JobCreate />} />
+          <Route
+            path="jobs/:jobId/applications"
+            element={<ApplicationsList />}
+          />
+        </Route>
+      </Routes>
+    </main>
   );
 }

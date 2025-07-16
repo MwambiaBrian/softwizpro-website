@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface FAQ {
   question: string;
@@ -17,6 +18,7 @@ interface ServiceFormData {
 }
 
 const AddServiceForm: React.FC = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<ServiceFormData>({
     title: "",
     shortDescription: "",
@@ -60,10 +62,36 @@ const AddServiceForm: React.FC = () => {
       faqs: [...prev.faqs, { question: "", answer: "" }],
     }));
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    console.log("Submitted data:", formData);
-    // Add API logic here
+
+    const form = new FormData();
+    form.append("title", formData.title);
+    form.append("shortDescription", formData.shortDescription);
+    form.append("longDescription", formData.longDescription);
+
+    formData.features.forEach((feature) => form.append("features", feature));
+
+    formData.faqs.forEach((faq) => form.append("faqs", JSON.stringify(faq)));
+
+    formData.photos.forEach((file) => {
+      form.append("photos", file);
+    });
+
+    try {
+      const res = await fetch("http://localhost:3000/services", {
+        method: "POST",
+        body: form,
+      });
+
+      if (!res.ok) throw new Error("Failed to submit");
+
+      const result = await res.json();
+      console.log("Service created:", result);
+      navigate("/admin/services");
+    } catch (err) {
+      console.error("Submit error:", err);
+    }
   };
 
   return (

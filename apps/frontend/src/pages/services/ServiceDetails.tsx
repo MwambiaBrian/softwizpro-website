@@ -98,7 +98,7 @@ export default function ServiceDetail() {
 
           {service.faqs && service.faqs.length > 0 && (
             <div className="mb-5">
-              <h4 className="text-warning mb-3">FAQs</h4>
+              <h4 className="text-warning mb-3">Frequently Asked Questions</h4>
               <div className="accordion bg-dark rounded">
                 {service.faqs.map((faq, index) => (
                   <div
@@ -111,7 +111,7 @@ export default function ServiceDetail() {
                   >
                     <div className="p-3 d-flex justify-content-between align-items-center">
                       <strong>{faq.question}</strong>
-                      <span>{openFaqIndex === index ? "−" : "+"}</span>
+                      <span> {openFaqIndex === index ? "▲" : "▼"}</span>
                     </div>
                     {openFaqIndex === index && (
                       <div className="px-3 pb-3 text-light">{faq.answer}</div>

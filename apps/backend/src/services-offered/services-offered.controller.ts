@@ -1,44 +1,92 @@
+// src/services/services.controller.ts
 import {
   Controller,
-  Get,
   Post,
-  Param,
   Body,
-  Put,
+  UploadedFiles,
+  UseInterceptors,
+  Get,
+  Param,
+  NotFoundException,
   Delete,
+  Patch,
 } from '@nestjs/common';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
+import { CreateServiceDto } from './dtos/create-service.dto';
 import { ServicesService } from './services-offered.service';
-import { Service } from './schemas/service.schema';
+import { UpdateServiceDto } from './dtos/update-service.dto';
 
-@Controller('api/services')
+@Controller('services')
 export class ServicesController {
-  constructor(private readonly servicesService: ServicesService) {}
+  constructor(private readonly service: ServicesService) {}
 
+  @Post()
+  @UseInterceptors(
+    FileFieldsInterceptor([{ name: 'photos', maxCount: 10 }], {
+      storage: diskStorage({
+        destination: './uploads/services',
+        filename: (_req, file, cb) => {
+          const uniqueSuffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
+          cb(null, uniqueSuffix + extname(file.originalname));
+        },
+      }),
+    }),
+  )
+  async createService(
+    @UploadedFiles() files: { photos?: Express.Multer.File[] },
+    @Body() body: any,
+  ) {
+    const parsedFeatures = Array.isArray(body.features)
+      ? body.features
+      : [body.features];
+
+    const parsedFaqs = Array.isArray(body.faqs)
+      ? body.faqs.map((faq) =>
+          typeof faq === 'string' ? JSON.parse(faq) : faq,
+        )
+      : [JSON.parse(body.faqs)];
+
+    const newService = await this.service.create({
+      ...body,
+      features: parsedFeatures,
+      faqs: parsedFaqs,
+      photos: files?.photos?.map((file) => file.filename) || [],
+    });
+
+    return newService;
+  }
   @Get()
-  async findAll(): Promise<Service[]> {
-    return this.servicesService.findAll();
+  async findAll() {
+    return this.service.findAll();
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<Service> {
-    return this.servicesService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    const serviceItem = await this.service.findOne(id);
+    if (!serviceItem) {
+      throw new NotFoundException(`Service with ID ${id} not found`);
+    }
+    return serviceItem;
   }
 
-  @Post()
-  async create(@Body() body: Partial<Service>): Promise<Service> {
-    return this.servicesService.create(body);
-  }
-
-  @Put(':id')
-  async update(
-    @Param('id') id: string,
-    @Body() body: Partial<Service>,
-  ): Promise<Service> {
-    return this.servicesService.update(id, body);
+  @Patch(':id')
+  async update(@Param('id') id: string, @Body() updateDto: UpdateServiceDto) {
+    const updated = await this.service.update(id, updateDto);
+    if (!updated) {
+      throw new NotFoundException(`Service with ID ${id} not found`);
+    }
+    return updated;
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string): Promise<void> {
-    return this.servicesService.remove(id);
+  async remove(@Param('id') id: string) {
+    const deleted = await this.service.remove(id);
+    if (!deleted) {
+      throw new NotFoundException(`Service with ID ${id} not found`);
+    }
+    return { message: 'Service deleted successfully' };
   }
 }

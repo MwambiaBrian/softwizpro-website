@@ -1,8 +1,9 @@
 // src/services/services.service.ts
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Service, ServiceDocument } from './schemas/service.schema';
 import { Model } from 'mongoose';
+import { UpdateServiceDto } from './dtos/update-service.dto';
 
 @Injectable()
 export class ServicesService {
@@ -10,30 +11,28 @@ export class ServicesService {
     @InjectModel(Service.name) private serviceModel: Model<ServiceDocument>,
   ) {}
 
+  async create(data: Partial<Service>) {
+    const created = new this.serviceModel(data);
+    return created.save();
+  }
   async findAll(): Promise<Service[]> {
     return this.serviceModel.find().exec();
   }
 
-  async findOne(id: string): Promise<Service> {
-    const service = await this.serviceModel.findById(id).exec();
-    if (!service) throw new NotFoundException('Service not found');
-    return service;
+  async findOne(id: string): Promise<Service | null> {
+    return this.serviceModel.findById(id).exec();
   }
 
-  async create(data: Partial<Service>): Promise<Service> {
-    return this.serviceModel.create(data);
-  }
-
-  async update(id: string, data: Partial<Service>): Promise<Service> {
-    const updated = await this.serviceModel.findByIdAndUpdate(id, data, {
-      new: true,
-    });
-    if (!updated) throw new NotFoundException('Service not found');
+  async update(id: string, dto: UpdateServiceDto): Promise<Service | null> {
+    const updated = await this.serviceModel
+      .findByIdAndUpdate(id, dto, {
+        new: true,
+      })
+      .exec();
     return updated;
   }
 
-  async remove(id: string): Promise<void> {
-    const result = await this.serviceModel.findByIdAndDelete(id);
-    if (!result) throw new NotFoundException('Service not found');
+  async remove(id: string): Promise<Service | null> {
+    return this.serviceModel.findByIdAndDelete(id).exec();
   }
 }

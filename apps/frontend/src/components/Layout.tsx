@@ -1,17 +1,20 @@
 import { Link } from "react-scroll";
+import { Dropdown } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./css/Layout.css"; // Custom styles here
+import { useAuth } from "../contexts/UserContext";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
+  const { user, logout } = useAuth(); // 👈 Get user from context
+
   return (
     <>
-      {/* Navbar */}
       <nav
         className="navbar navbar-expand-lg navbar-dark fixed-top"
         style={{ backgroundColor: "#5F9EA0" }}
       >
         <div className="container">
-          <a className="navbar-brand fw-bold text-white" href="#">
+          <a className="navbar-brand fw-bold text-white" href="/">
             Softwizpro
           </a>
           <button
@@ -25,6 +28,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           >
             <span className="navbar-toggler-icon"></span>
           </button>
+
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav ms-auto">
               {[
@@ -35,10 +39,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 "careers",
                 "contact",
               ].map((id) => (
-                <li className="nav-item" key={id}>
+                <li className="nav-item nav-pointer" key={id}>
                   <Link
                     to={id}
-                    className="nav-link text-white"
+                    className="nav-link text-white nav-pointer"
                     activeClass="active"
                     smooth={true}
                     duration={500}
@@ -48,16 +52,42 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   </Link>
                 </li>
               ))}
+
+              {/* 👤 Profile Dropdown */}
+              {user && (
+                <li className="nav-item dropdown">
+                  <Dropdown>
+                    <Dropdown.Toggle
+                      variant="link"
+                      className="nav-link text-white dropdown-toggle"
+                      style={{ cursor: "pointer" }}
+                      id="profileDropdown"
+                    >
+                      {user.username}
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                      {user.role === "admin" && (
+                        <Dropdown.Item href="/admin/dashboard">
+                          Admin Dashboard
+                        </Dropdown.Item>
+                      )}
+                      <Dropdown.Item href="/profile">Profile</Dropdown.Item>
+                      <Dropdown.Item onClick={logout}>Logout</Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </li>
+              )}
             </ul>
           </div>
         </div>
       </nav>
 
-      {/* Main Content */}
+      {/* Content */}
       <div style={{ paddingTop: "30px" }}>{children}</div>
 
       {/* Footer */}
       <footer
+        id="contact"
         className="text-white mt-0 pt-5"
         style={{
           backgroundColor: "#0d0d0d",
@@ -99,21 +129,21 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </div>
 
             {/* Contact Info */}
-            <div className="col-md-4 mb-4">
+            <div id="#contact" className="col-md-4 mb-4">
               <h5 className="text-warning">Contact Us</h5>
               <p>
                 Email:{" "}
-                <a href="mailto:info@softwizpro.com" className="text-white">
-                  info@softwizpro.com
+                <a href="mailto:softwizpro@gmail.com>" className="text-white">
+                  softwizpro@gmail.com
                 </a>
               </p>
               <p>
                 Phone:{" "}
                 <a href="tel:+1234567890" className="text-white">
-                  +1 (234) 567-890
+                  0202555444
                 </a>
               </p>
-              <p>Address: 123 Digital Avenue, Nairobi, Kenya</p>
+              <p>Address: Bypass Road, Ruiru, Kenya</p>
             </div>
 
             {/* Social Media */}

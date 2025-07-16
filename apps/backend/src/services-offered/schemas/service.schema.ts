@@ -18,11 +18,11 @@ export class Service {
   @Prop([String])
   features: string[];
 
-  @Prop()
-  imageUrl: string;
-
   @Prop([{ question: String, answer: String }])
   faqs: { question: string; answer: string }[];
+
+  @Prop([String])
+  photos: string[]; // filenames
 }
 
 export const ServiceSchema = SchemaFactory.createForClass(Service);
