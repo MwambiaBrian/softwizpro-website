@@ -1,5 +1,5 @@
 // src/contexts/UserContext.tsx
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { ReactNode } from "react";
 

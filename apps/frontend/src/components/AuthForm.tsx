@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom"; // 👈 Added Link
+import { Link } from "react-router-dom"; // 👈 Added Link
 import { motion } from "framer-motion";
 
 type Props = {
@@ -10,7 +10,6 @@ type Props = {
 export default function AuthForm({ onSubmit, isRegister = false }: Props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

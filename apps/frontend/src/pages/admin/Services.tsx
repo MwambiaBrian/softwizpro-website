@@ -6,8 +6,8 @@ const ServiceList = () => {
   const navigate = useNavigate();
 
   const [services, setServices] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  // const [loading, setLoading] = useState(true);
+  // const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -15,10 +15,10 @@ const ServiceList = () => {
         const response = await axios.get("http://localhost:3000/services");
         setServices(response.data);
       } catch (err) {
-        setError("Failed to load services.");
+        //  setError("Failed to load services.");
         console.error(err);
       } finally {
-        setLoading(false);
+        // setLoading(false);
       }
     };
 

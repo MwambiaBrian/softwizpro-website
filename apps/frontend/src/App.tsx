@@ -1,5 +1,5 @@
 // src/App.tsx
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Routes, Route } from "react-router-dom";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Landing from "./pages/Landing";
@@ -18,7 +18,6 @@ import AddServiceForm from "./pages/admin/services/AddServiceForm";
 import AdminJobList from "./pages/admin/jobs/JobList";
 import ApplicationsList from "./pages/admin/applications/ApplicationList";
 import JobCreate from "./pages/admin/jobs/JobCreate";
-import { UserProvider } from "./contexts/UserContext";
 
 export default function App() {
   return (
