@@ -1,9 +1,5 @@
 // src/App.tsx
-import {
-  BrowserRouter as Routes,
-  Route,
-  BrowserRouter,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Landing from "./pages/Landing";
@@ -27,7 +23,7 @@ import { UserProvider } from "./contexts/UserContext";
 export default function App() {
   return (
     <main className="">
-      <BrowserRouter>
+      <Router>
         <UserProvider>
           <Routes>
             <Route path="/" element={<Landing />} />
@@ -53,7 +49,7 @@ export default function App() {
             </Route>
           </Routes>
         </UserProvider>
-      </BrowserRouter>
+      </Router>
     </main>
   );
 }
