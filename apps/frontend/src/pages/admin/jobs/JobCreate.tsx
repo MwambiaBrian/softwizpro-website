@@ -14,7 +14,7 @@ interface JobFormData {
 
 const JobCreate: React.FC = () => {
   const navigate = useNavigate();
-
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
   const [formData, setFormData] = useState<JobFormData>({
     title: "",
     location: "",
@@ -70,7 +70,7 @@ const JobCreate: React.FC = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:3000/job-posting", formData);
+      await axios.post(`${BASE_URL}/job-posting`, formData);
       navigate("/admin/careers");
     } catch (err) {
       console.error(err);

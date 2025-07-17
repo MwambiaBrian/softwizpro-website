@@ -12,9 +12,9 @@ type Service = {
 
 export default function ServicesSection() {
   const [services, setServices] = useState<Service[]>([]);
-
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
   useEffect(() => {
-    axios.get("http://localhost:3000/api/services").then((res) => {
+    axios.get(`${BASE_URL}/services`).then((res) => {
       setServices(res.data);
     });
   }, []);

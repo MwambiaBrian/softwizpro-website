@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 const ServiceList = () => {
   const navigate = useNavigate();
-
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
   const [services, setServices] = useState<any[]>([]);
   // const [loading, setLoading] = useState(true);
   // const [error, setError] = useState("");
@@ -12,7 +12,7 @@ const ServiceList = () => {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/services");
+        const response = await axios.get(`${BASE_URL}/services`);
         setServices(response.data);
       } catch (err) {
         //  setError("Failed to load services.");
@@ -28,7 +28,7 @@ const ServiceList = () => {
   const handleDelete = async (id: string) => {
     if (window.confirm("Are you sure you want to delete this service?")) {
       try {
-        await axios.delete(`http://localhost:3000/services/${id}`);
+        await axios.delete(`${BASE_URL}/services/${id}`);
         setServices((prev) => prev.filter((service) => service._id !== id));
       } catch (err) {
         alert("Failed to delete service.");

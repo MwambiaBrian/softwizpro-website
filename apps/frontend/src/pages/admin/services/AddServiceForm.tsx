@@ -18,6 +18,7 @@ interface ServiceFormData {
 }
 
 const AddServiceForm: React.FC = () => {
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
   const navigate = useNavigate();
   const [formData, setFormData] = useState<ServiceFormData>({
     title: "",
@@ -79,7 +80,7 @@ const AddServiceForm: React.FC = () => {
     });
 
     try {
-      const res = await fetch("http://localhost:3000/services", {
+      const res = await fetch(`${BASE_URL}/services`, {
         method: "POST",
         body: form,
       });

@@ -12,7 +12,7 @@ interface Job {
 
 const AdminJobList = () => {
   const navigate = useNavigate();
-
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -20,7 +20,7 @@ const AdminJobList = () => {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/job-posting");
+        const res = await axios.get(`${BASE_URL}/job-posting`);
         setJobs(res.data);
       } catch (err) {
         console.error(err);
@@ -36,7 +36,7 @@ const AdminJobList = () => {
   const handleDelete = async (id: string) => {
     if (window.confirm("Are you sure you want to delete this job listing?")) {
       try {
-        await axios.delete(`http://localhost:3000/job-posting/${id}`);
+        await axios.delete(`${BASE_URL}/job-posting/${id}`);
         setJobs((prev) => prev.filter((job) => job._id !== id));
       } catch (err) {
         console.error(err);
