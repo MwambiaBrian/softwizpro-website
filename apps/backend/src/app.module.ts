@@ -27,7 +27,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       rootPath: join(__dirname, '..', 'uploads'),
       serveRoot: '/uploads',
     }),
-    MongooseModule.forRoot('mongodb://localhost:27017/softwizpro'),
     AuthModule,
     UsersModule,
     ServicesOfferedModule,
