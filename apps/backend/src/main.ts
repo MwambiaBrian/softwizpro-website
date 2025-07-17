@@ -7,7 +7,7 @@ async function bootstrap() {
   app.enableCors({
     origin: [
       'http://localhost:5173',
-      'https://softwizpro-website-backend.onrender.com',
+      'https://softwizpro-website.onrender.com',
     ], // frontend URL
     methods: 'GET,POST,PUT,DELETE',
     credentials: true,
