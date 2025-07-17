@@ -9,9 +9,20 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { JobPostingModule } from './job-posting/job-posting.module';
 import { TestimonialModule } from './testimonial/testimonial.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true, // Makes the config available across the entire app
+    }),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get<string>('MONGO_URL'),
+      }),
+      inject: [ConfigService],
+    }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'uploads'),
       serveRoot: '/uploads',

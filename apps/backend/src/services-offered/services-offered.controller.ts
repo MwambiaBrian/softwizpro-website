@@ -14,7 +14,7 @@ import {
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
-import { CreateServiceDto } from './dtos/create-service.dto';
+
 import { ServicesService } from './services-offered.service';
 import { UpdateServiceDto } from './dtos/update-service.dto';
 
