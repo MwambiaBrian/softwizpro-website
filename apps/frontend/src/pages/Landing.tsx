@@ -30,6 +30,7 @@ export default function LandingPage() {
   const [services, setServices] = useState<Service[]>([]);
   const [careers, setCareers] = useState([]);
   const BASE_URL = import.meta.env.VITE_BASE_URL;
+
   useEffect(() => {
     axios.get(`${BASE_URL}/services`).then((res) => setServices(res.data));
     axios.get("/api/careers").then((res) => setCareers(res.data));
@@ -144,7 +145,7 @@ export default function LandingPage() {
               <div className="col-md-4" key={index}>
                 <div className="card-hover bg-dark text-white p-3 h-100 rounded shadow">
                   <img
-                    src={`https://softwizpro-website-backend.onrender.com/uploads/${service.photos[0]}`}
+                    src={`https://softwizpro-website-backend.onrender.com/uploads/services/${service.photos[0]}`}
                     alt={service.title}
                     className="img-fluid mb-3 rounded shadow"
                   />
