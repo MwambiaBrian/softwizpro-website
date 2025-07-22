@@ -7,6 +7,11 @@ export const TestimonialSchema = new Schema(
     message: { type: String, required: true },
     company: { type: String },
     photoUrl: { type: String }, // Optional URL to avatar
+    status: {
+      type: String,
+      enum: ['pending', 'approved', 'rejected'],
+      default: 'pending',
+    },
   },
   { timestamps: true },
 );

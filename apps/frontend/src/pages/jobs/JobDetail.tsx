@@ -1,37 +1,36 @@
 import { useParams } from "react-router-dom";
 import Layout from "../../components/Layout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-// Sample job data (normally this would come from an API or database)
-const jobData = {
-  "frontend-developer": {
-    title: "Frontend Developer",
-    location: "Remote",
-    type: "Full-Time",
-    description: `We are looking for a skilled Frontend Developer to join our team and help us build modern, responsive web applications.`,
-    responsibilities: [
-      "Build responsive UI with React or Vue.",
-      "Work with backend APIs.",
-      "Collaborate with designers and product managers.",
-    ],
-    qualifications: [
-      "2+ years experience in frontend development.",
-      "Strong HTML, CSS, JavaScript skills.",
-      "Experience with modern frameworks like React.",
-    ],
-  },
-  // Add more job entries as needed...
-};
+interface Job {
+  _id: string;
+  title: string;
+  location: string;
+  employmentType: string;
+  description: string;
+  responsibilities: string[];
+  qualifications: string[];
+  createdAt: string;
+}
 
 export default function JobDetail() {
   const { jobId } = useParams<{ jobId: string }>();
-  const job = jobData[jobId as keyof typeof jobData];
-
+  const [jobs, setJobs] = useState<Job[]>([]);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     resume: null as File | null,
   });
+
+  useEffect(() => {
+    axios
+      .get("https://softwizpro-website-backend.onrender.com/job-posting")
+      .then((res) => setJobs(res.data))
+      .catch((err) => console.error("Error fetching jobs:", err));
+  }, []);
+
+  const selectedJob = jobs.find((j) => j._id === jobId);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, files } = e.target;
@@ -45,10 +44,10 @@ export default function JobDetail() {
     e.preventDefault();
     console.log("Submitted:", formData);
     alert("Application submitted successfully!");
-    // You'd typically send this to a backend or API
+    // Submit to backend
   };
 
-  if (!job) {
+  if (!selectedJob) {
     return (
       <Layout>
         <div className="text-white py-5 text-center">
@@ -66,23 +65,23 @@ export default function JobDetail() {
         style={{ backgroundColor: "#1c1c1c" }}
       >
         <div className="container">
-          <h2 className="text-warning mb-2">{job.title}</h2>
+          <h2 className="text-warning mb-2">{selectedJob.title}</h2>
           <p className="text-light">
-            <strong>Location:</strong> {job.location} | <strong>Type:</strong>{" "}
-            {job.type}
+            <strong>Location:</strong> {selectedJob.location} |{" "}
+            <strong>Type:</strong> {selectedJob.employmentType}
           </p>
-          <p className="mb-4">{job.description}</p>
+          <p className="mb-4">{selectedJob.description}</p>
 
           <h5 className="text-warning">Responsibilities</h5>
           <ul>
-            {job.responsibilities.map((item, index) => (
+            {selectedJob.responsibilities.map((item, index) => (
               <li key={index}>{item}</li>
             ))}
           </ul>
 
           <h5 className="mt-4 text-warning">Qualifications</h5>
           <ul>
-            {job.qualifications.map((item, index) => (
+            {selectedJob.qualifications.map((item, index) => (
               <li key={index}>{item}</li>
             ))}
           </ul>
@@ -129,6 +128,40 @@ export default function JobDetail() {
               Submit Application
             </button>
           </form>
+
+          {/* Scroll Feed of Other Jobs */}
+          <hr className="my-5" />
+          <h4 className="text-orange mb-3">Other Openings</h4>
+          <div
+            className="d-flex gap-4 overflow-auto"
+            style={{ whiteSpace: "nowrap" }}
+          >
+            {jobs
+              .filter((job) => job._id !== selectedJob._id)
+              .map((job) => (
+                <div
+                  key={job._id}
+                  className="card bg-light text-dark"
+                  style={{ minWidth: "250px" }}
+                >
+                  <div className="card-body">
+                    <h5 className="card-title">{job.title}</h5>
+                    <p className="mb-1" style={{ fontSize: "0.9rem" }}>
+                      <strong>Location:</strong> {job.location}
+                    </p>
+                    <p className="mb-2" style={{ fontSize: "0.85rem" }}>
+                      {job.description.slice(0, 80)}...
+                    </p>
+                    <a
+                      href={`/careers/${job._id}`}
+                      className="btn btn-sm btn-outline-dark"
+                    >
+                      View Job
+                    </a>
+                  </div>
+                </div>
+              ))}
+          </div>
         </div>
       </section>
     </Layout>

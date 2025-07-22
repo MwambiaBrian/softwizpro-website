@@ -1,61 +1,41 @@
 import { useParams } from "react-router-dom";
 import Layout from "../../components/Layout";
-import { useState } from "react";
-//import "../../pages/css/ServiceDetails.css"; // Create this CSS file optionally
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-const services = {
-  pos: {
-    title: "Retail POS",
-    description: "A powerful POS system for retail shops.",
-    longDescription:
-      "This is a detailed description of the Retail POS system...",
-    features: [
-      "Inventory Management",
-      "Sales Reporting",
-      "User Access Control",
-    ],
-    audience: "Retail shops, restaurants, supermarkets, and service providers.",
-    imageUrl:
-      "https://www.bing.com/th/id/OIP.Feiaak4bnTAiwT3sAL2GfQHaEy?w=244&h=211&c=8&rs=1&qlt=90&o=6&pid=3.1&rm=2",
-    faqs: [
-      { question: "Is it cloud-based?", answer: "Yes, 100% cloud hosted." },
-      {
-        question: "Can I use it offline?",
-        answer: "Yes, with limited features.",
-      },
-    ],
-  },
-  accounting: {
-    title: "Accounting Software",
-    description: "Easily manage your business finances and reports.",
-    longDescription:
-      "Full-featured accounting software for small to mid-size businesses.",
-    features: ["Automated bookkeeping", "Custom invoices", "Tax calculations"],
-    audience: "Startups, SMEs, and financial consultants.",
-    imageUrl:
-      "https://th.bing.com/th/id/R.1a78000e23f9299e41380c1c609a49c6?rik=K3snrEYKJuvAow&pid=ImgRaw&r=0",
-    faqs: [
-      { question: "Does it support multi-currency?", answer: "Yes, it does." },
-      { question: "Is it suitable for freelancers?", answer: "Absolutely." },
-    ],
-  },
-};
+interface FAQ {
+  question: string;
+  answer: string;
+}
+
+interface Service {
+  _id: string;
+  title: string;
+  description: string;
+  longDescription: string;
+  features: string[];
+  audience: string;
+  faqs: FAQ[];
+  photos: string[]; // filenames stored on backend
+}
 
 export default function ServiceDetail() {
   const { serviceId } = useParams<{ serviceId: string }>();
-  const service = services[serviceId as keyof typeof services];
+  const [services, setServices] = useState<Service[]>([]);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
 
-  if (!service) {
-    return (
-      <Layout>
-        <div className="text-center text-white py-5">
-          <h2 className="text-warning">Service Not Found</h2>
-          <p>We couldn't find the service you're looking for.</p>
-        </div>
-      </Layout>
-    );
-  }
+  useEffect(() => {
+    axios
+      .get("https://softwizpro-website-backend.onrender.com/services")
+      .then((res) => {
+        setServices(res.data.reverse()); // newest first
+      })
+      .catch((err) => {
+        console.error("Error fetching services:", err);
+      });
+  }, []);
+
+  const selectedService = services.find((s) => s._id === serviceId);
 
   return (
     <Layout>
@@ -64,68 +44,120 @@ export default function ServiceDetail() {
         style={{ backgroundColor: "#1c1c1c" }}
       >
         <div className="container">
-          <div className="text-center mb-5">
-            <h2 className="text-warning">{service.title}</h2>
-            <p className="lead">{service.description}</p>
-            <img
-              src={service.imageUrl}
-              alt={service.title}
-              className="img-fluid rounded shadow mt-3"
-              style={{ maxHeight: "300px" }}
-            />
-          </div>
-
-          <div className="mb-5">
-            <h4 className="text-warning">About This Service</h4>
-            <p>{service.longDescription}</p>
-          </div>
-
-          <div className="mb-5">
-            <h4 className="text-warning">Key Features</h4>
-            <ul className="ps-3">
-              {service.features.map((feature, index) => (
-                <li key={index} className="mb-1">
-                  {feature}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="mb-5">
-            <h4 className="text-warning">Target Users</h4>
-            <p>{service.audience}</p>
-          </div>
-
-          {service.faqs && service.faqs.length > 0 && (
-            <div className="mb-5">
-              <h4 className="text-warning mb-3">Frequently Asked Questions</h4>
-              <div className="accordion bg-dark rounded">
-                {service.faqs.map((faq, index) => (
-                  <div
-                    key={index}
-                    className="border-bottom"
-                    style={{ cursor: "pointer" }}
-                    onClick={() =>
-                      setOpenFaqIndex(openFaqIndex === index ? null : index)
-                    }
-                  >
-                    <div className="p-3 d-flex justify-content-between align-items-center">
-                      <strong>{faq.question}</strong>
-                      <span> {openFaqIndex === index ? "▲" : "▼"}</span>
-                    </div>
-                    {openFaqIndex === index && (
-                      <div className="px-3 pb-3 text-light">{faq.answer}</div>
-                    )}
-                  </div>
-                ))}
+          {selectedService ? (
+            <>
+              <div className="text-center mb-5">
+                <h2 className="text-warning">{selectedService.title}</h2>
+                <p className="lead">{selectedService.description}</p>
+                {selectedService.photos?.[0] && (
+                  <img
+                    src={`https://softwizpro-website-backend.onrender.com/uploads/services/${selectedService.photos[0]}`}
+                    alt={selectedService.title}
+                    className="img-fluid rounded shadow mt-3"
+                    style={{ maxHeight: "300px" }}
+                  />
+                )}
               </div>
+
+              <div className="mb-5">
+                <h4 className="text-warning">About This Service</h4>
+                <p>{selectedService.longDescription}</p>
+              </div>
+
+              <div className="mb-5">
+                <h4 className="text-warning">Key Features</h4>
+                <ul className="ps-3">
+                  {selectedService.features.map((feature, index) => (
+                    <li key={index} className="mb-1">
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="mb-5">
+                <h4 className="text-warning">Target Users</h4>
+                <p>{selectedService.audience}</p>
+              </div>
+
+              {selectedService.faqs && selectedService.faqs.length > 0 && (
+                <div className="mb-5">
+                  <h4 className="text-warning mb-3">
+                    Frequently Asked Questions
+                  </h4>
+                  <div className="accordion bg-dark rounded">
+                    {selectedService.faqs.map((faq, index) => (
+                      <div
+                        key={index}
+                        className="border-bottom"
+                        style={{ cursor: "pointer" }}
+                        onClick={() =>
+                          setOpenFaqIndex(openFaqIndex === index ? null : index)
+                        }
+                      >
+                        <div className="p-3 d-flex justify-content-between align-items-center">
+                          <strong>{faq.question}</strong>
+                          <span>{openFaqIndex === index ? "▲" : "▼"}</span>
+                        </div>
+                        {openFaqIndex === index && (
+                          <div className="px-3 pb-3 text-light">
+                            {faq.answer}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="text-center mb-5">
+                <a href="#contact" className="btn btn-warning px-4 py-2">
+                  Request a Demo
+                </a>
+              </div>
+            </>
+          ) : (
+            <div className="text-center">
+              <h3 className="text-warning">Loading service details...</h3>
             </div>
           )}
 
-          <div className="text-center">
-            <a href="#contact" className="btn btn-warning px-4 py-2">
-              Request a Demo
-            </a>
+          {/* Scroll Feed of All Services */}
+          <div className="mt-5 border-top pt-4">
+            <h4 className="text-orange mb-4">Explore Other Services</h4>
+            <div
+              className="d-flex flex-row gap-4 overflow-auto"
+              style={{ whiteSpace: "nowrap" }}
+            >
+              {services.map((service) => (
+                <div
+                  key={service._id}
+                  className="card text-dark bg-light"
+                  style={{ minWidth: "250px" }}
+                >
+                  {service.photos?.[0] && (
+                    <img
+                      src={`https://softwizpro-website-backend.onrender.com/uploads/services/${service.photos[0]}`}
+                      className="card-img-top"
+                      alt={service.title}
+                      style={{ height: "150px", objectFit: "cover" }}
+                    />
+                  )}
+                  <div className="card-body">
+                    <h5 className="card-title">{service.title}</h5>
+                    <p className="card-text" style={{ fontSize: "0.9rem" }}>
+                      {service.description}
+                    </p>
+                    <a
+                      href={`/services/${service._id}`}
+                      className="btn btn-sm btn-outline-dark"
+                    >
+                      View Details
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>

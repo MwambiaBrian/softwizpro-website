@@ -19,6 +19,7 @@ import AdminJobList from "./pages/admin/jobs/JobList";
 import ApplicationsList from "./pages/admin/applications/ApplicationList";
 import JobCreate from "./pages/admin/jobs/JobCreate";
 import { UserProvider } from "./contexts/UserContext";
+import TestimonialsTable from "./pages/admin/testimonials/Testimonials";
 
 export default function App() {
   return (
@@ -41,6 +42,7 @@ export default function App() {
               <Route path="services" element={<AdminServices />} />
               <Route path="services/create" element={<AddServiceForm />} />
               <Route path="careers" element={<AdminJobList />} />
+              <Route path="testimonials" element={<TestimonialsTable />} />
               <Route path="jobs/create" element={<JobCreate />} />
               <Route
                 path="jobs/:jobId/applications"

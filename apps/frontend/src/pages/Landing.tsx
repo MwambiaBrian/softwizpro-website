@@ -10,6 +10,27 @@ declare global {
     bootstrap: any;
   }
 }
+// types/testimonial.ts
+
+export interface Testimonial {
+  name: string;
+  role?: string;
+  message: string;
+  company?: string;
+  photoUrl?: string;
+}
+
+export interface JobPosting {
+  _id?: string;
+  title: string;
+  location: string;
+  employmentType: string; // e.g., "Full-Time", "Part-Time"
+  description: string;
+  responsibilities: string[];
+  qualifications: string[];
+  createdAt?: Date;
+  updatedAt?: Date;
+}
 export interface Service {
   title: string;
   shortDescription: string;
@@ -28,12 +49,24 @@ export interface Service {
 export default function LandingPage() {
   const isLoggedIn = !!localStorage.getItem("token");
   const [services, setServices] = useState<Service[]>([]);
-  const [careers, setCareers] = useState([]);
+  const [careers, setCareers] = useState<JobPosting[]>([]);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [form, setForm] = useState<Testimonial>({
+    name: "",
+    role: "",
+    message: "",
+    company: "",
+    photoUrl: "",
+  });
+
   const BASE_URL = import.meta.env.VITE_BASE_URL;
 
   useEffect(() => {
     axios.get(`${BASE_URL}/services`).then((res) => setServices(res.data));
-    axios.get("/api/careers").then((res) => setCareers(res.data));
+    axios.get(`${BASE_URL}/job-posting`).then((res) => setCareers(res.data));
+    axios
+      .get(`${BASE_URL}/testimonials`)
+      .then((res) => setTestimonials(res.data));
   }, []);
   console.log(services);
   console.log(careers);
@@ -49,24 +82,46 @@ export default function LandingPage() {
     deleteSpeed: 50,
     delaySpeed: 1500,
   });
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+  };
 
-  const testimonials = [
-    {
-      name: "Jane Doe",
-      role: "CEO of StartupX",
-      text: "Softwizpro transformed our workflow and built a platform we love!",
-    },
-    {
-      name: "John Smith",
-      role: "CTO of FinTechNow",
-      text: "Their team was incredibly professional and fast. Highly recommend.",
-    },
-    {
-      name: "Grace A.",
-      role: "COO, AgroLink",
-      text: "Their POS and accounting integration saved us hours each week.",
-    },
-  ];
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post(`${BASE_URL}/testimonials`, form);
+      const modalEl = document.getElementById("testimonialModal");
+      if (modalEl) {
+        const modal = Modal.getInstance(modalEl) || new Modal(modalEl);
+        modal.hide();
+      }
+      alert("Testimonial submitted!");
+      console.log(res.data);
+    } catch (error) {
+      console.error("Submission failed", error);
+      alert("Failed to submit testimonial.");
+    }
+  };
+  // const testimonials = [
+  //   {
+  //     name: "Jane Doe",
+  //     role: "CEO of StartupX",
+  //     text: "Softwizpro transformed our workflow and built a platform we love!",
+  //   },
+  //   {
+  //     name: "John Smith",
+  //     role: "CTO of FinTechNow",
+  //     text: "Their team was incredibly professional and fast. Highly recommend.",
+  //   },
+  //   {
+  //     name: "Grace A.",
+  //     role: "COO, AgroLink",
+  //     text: "Their POS and accounting integration saved us hours each week.",
+  //   },
+  // ];
 
   return (
     <Layout>
@@ -121,26 +176,6 @@ export default function LandingPage() {
             Our Services
           </h2>
           <div className="row gy-4">
-            {/* {[
-              {
-                title: "Point of Sale (POS) Systems",
-                img: "https://www.bing.com/th/id/OIP.Feiaak4bnTAiwT3sAL2GfQHaEy?w=244&h=211&c=8&rs=1&qlt=90&o=6&pid=3.1&rm=2",
-                desc: "Seamlessly manage sales, inventory, and transactions in retail environments.",
-                link: "/services/pos",
-              },
-              {
-                title: "Property Management System",
-                img: "https://bukitvista-wordpress-storage.s3.us-east-2.amazonaws.com/wp-content/uploads/2023/01/PMS-illustration.jpg",
-                desc: "Digitally control rent, maintenance, and tenant data with ease and flexibility.",
-                link: "/services/property-management",
-              },
-              {
-                title: "Accounting Software",
-                img: "https://th.bing.com/th/id/R.1a78000e23f9299e41380c1c609a49c6?rik=K3snrEYKJuvAow&pid=ImgRaw&r=0",
-                desc: "Track finances, automate invoicing, and generate insightful reports effortlessly.",
-                link: "/services/accounting",
-              },
-            ] */}
             {services.map((service, index) => (
               <div className="col-md-4" key={index}>
                 <div className="card-hover bg-dark text-white p-3 h-100 rounded shadow">
@@ -151,7 +186,10 @@ export default function LandingPage() {
                   />
                   <h5>{service.title}</h5>
                   <p>{service.shortDescription}</p>
-                  <a href="" className="btn btn-outline-warning btn-sm mt-2">
+                  <a
+                    href={`/services/${service._id}`}
+                    className="btn btn-outline-warning btn-sm mt-2"
+                  >
                     Read More
                   </a>
                 </div>
@@ -180,48 +218,20 @@ export default function LandingPage() {
             Careers
           </h2>
           <div className="row gy-4">
-            {[
-              {
-                title: "Frontend Developer",
-                location: "Remote / Nairobi HQ",
-                summary: "React | TypeScript | TailwindCSS",
-                description:
-                  "We’re looking for a Frontend Developer to build stunning UIs...",
-                applyLink:
-                  "mailto:careers@softwizpro.com?subject=Frontend Developer Application",
-              },
-              {
-                title: "Backend Engineer",
-                location: "Nairobi / Hybrid",
-                summary: "Node.js | Express | PostgreSQL",
-                description:
-                  "Join our backend team to create robust APIs and scalable systems...",
-                applyLink:
-                  "mailto:careers@softwizpro.com?subject=Backend Engineer Application",
-              },
-              {
-                title: "UI/UX Designer",
-                location: "Remote",
-                summary: "Figma | Prototyping | User Research",
-                description:
-                  "As a UI/UX designer, you’ll collaborate closely with developers...",
-                applyLink:
-                  "mailto:careers@softwizpro.com?subject=UIUX Designer Application",
-              },
-            ].map((job, index) => (
+            {careers.map((job, index) => (
               <div className="col-md-4" key={index}>
                 <div className="bg-dark border border-secondary rounded p-4 h-100 d-flex flex-column shadow-sm">
                   <h5 className="text-warning">{job.title}</h5>
                   <p>
                     <strong>Location:</strong> {job.location}
                   </p>
-                  <p className="text-muted small">{job.summary}</p>
+                  <p className="text-muted small">{job.description}</p>
                   <details className="text-white small mb-3">
                     <summary className="text-warning">See More</summary>
                     <p>{job.description}</p>
                   </details>
                   <a
-                    href={job.applyLink}
+                    href={`/careers/${job._id}`}
                     className="btn btn-outline-warning mt-auto"
                   >
                     Apply
@@ -326,7 +336,7 @@ export default function LandingPage() {
                 className={`carousel-item ${index === 0 ? "active" : ""}`}
               >
                 <blockquote className="blockquote text-center text-white px-4">
-                  <p className="mb-4 fst-italic">"{t.text}"</p>
+                  <p className="mb-4 fst-italic">"{t.message}"</p>
                   <footer className="blockquote-footer text-light">
                     {t.name}, <cite>{t.role}</cite>
                   </footer>
@@ -386,37 +396,101 @@ export default function LandingPage() {
                 ></button>
               </div>
               <form
-                className="modal-body"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  alert("Thank you for your feedback!");
+                onSubmit={handleSubmit}
+                className="p-4 rounded shadow"
+                style={{
+                  backgroundColor: "#f8f9fa",
+                  border: "1px solid #ccc",
+                  maxWidth: "600px",
+                  margin: "0 auto",
                 }}
               >
-                <input
-                  type="text"
-                  className="form-control mb-3"
-                  placeholder="Your Name"
-                  required
-                />
-                <input
-                  type="text"
-                  className="form-control mb-3"
-                  placeholder="Your Role or Company"
-                  required
-                />
-                <textarea
-                  className="form-control mb-3"
-                  rows={3}
-                  placeholder="Your Testimonial..."
-                  required
-                />
-                <div className="text-end">
+                <h4 className="mb-3 text-center" style={{ color: "cadetblue" }}>
+                  Submit a Testimonial
+                </h4>
+
+                <div className="mb-3">
+                  <label className="form-label" style={{ color: "black" }}>
+                    Name *
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    className="form-control"
+                    required
+                    value={form.name}
+                    onChange={handleChange}
+                    style={{ borderColor: "cadetblue" }}
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <label className="form-label" style={{ color: "black" }}>
+                    Role
+                  </label>
+                  <input
+                    type="text"
+                    name="role"
+                    className="form-control"
+                    value={form.role}
+                    onChange={handleChange}
+                    style={{ borderColor: "cadetblue" }}
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <label className="form-label" style={{ color: "black" }}>
+                    Company
+                  </label>
+                  <input
+                    type="text"
+                    name="company"
+                    className="form-control"
+                    value={form.company}
+                    onChange={handleChange}
+                    style={{ borderColor: "cadetblue" }}
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <label className="form-label" style={{ color: "black" }}>
+                    Message *
+                  </label>
+                  <textarea
+                    name="message"
+                    className="form-control"
+                    required
+                    value={form.message}
+                    onChange={handleChange}
+                    style={{ borderColor: "cadetblue" }}
+                  ></textarea>
+                </div>
+
+                <div className="mb-3">
+                  <label className="form-label" style={{ color: "black" }}>
+                    Photo URL
+                  </label>
+                  <input
+                    type="url"
+                    name="photoUrl"
+                    className="form-control"
+                    value={form.photoUrl}
+                    onChange={handleChange}
+                    style={{ borderColor: "cadetblue" }}
+                  />
+                </div>
+
+                <div className="text-center">
                   <button
                     type="submit"
-                    className="btn btn-warning"
-                    data-bs-dismiss="modal"
+                    className="btn"
+                    style={{
+                      backgroundColor: "orange",
+                      color: "black",
+                      border: "none",
+                    }}
                   >
-                    Submit
+                    Submit Testimonial
                   </button>
                 </div>
               </form>
