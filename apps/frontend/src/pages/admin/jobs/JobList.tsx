@@ -46,8 +46,14 @@ const AdminJobList = () => {
   };
 
   return (
-    <div className="container py-5">
-      <h2 className="mb-4 fw-bold" style={{ color: "orange" }}>
+    <div
+      className="container py-5"
+      style={{ marginLeft: "120px",  }}
+    >
+      <h2
+        className="mb-4 fw-bold"
+        style={{  color: "orange" }}
+      >
         Job Listings Management
       </h2>
 

@@ -101,6 +101,7 @@ const AddServiceForm: React.FC = () => {
         maxHeight: "100vh",
         overflow: "hidden",
         padding: "2rem",
+        marginLeft: "100px",
         backgroundColor: "#fff",
         color: "black",
       }}

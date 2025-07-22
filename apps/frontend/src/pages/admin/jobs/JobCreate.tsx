@@ -79,7 +79,7 @@ const JobCreate: React.FC = () => {
   };
 
   return (
-    <div className="container py-4">
+    <div className="container py-4" style={{ marginLeft: "120px" }}>
       <h2 className="mb-4 fw-bold" style={{ color: "orange" }}>
         Create New Job Posting
       </h2>

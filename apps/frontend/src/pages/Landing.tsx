@@ -2,16 +2,40 @@ import { Cursor, useTypewriter } from "react-simple-typewriter";
 import Layout from "../components/Layout";
 import { Modal } from "bootstrap";
 import "./css/LandingPage.css";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 declare global {
   interface Window {
     bootstrap: any;
   }
 }
+export interface Service {
+  title: string;
+  shortDescription: string;
+  longDescription?: string;
+  features?: string[];
+  faqs?: {
+    question: string;
+    answer: string;
+  }[];
+  photos: string[];
+  createdAt?: string; // added by timestamps
+  updatedAt?: string; // added by timestamps
+  _id?: string; // MongoDB document ID
+}
 
 export default function LandingPage() {
   const isLoggedIn = !!localStorage.getItem("token");
-
+  const [services, setServices] = useState<Service[]>([]);
+  const [careers, setCareers] = useState([]);
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
+  useEffect(() => {
+    axios.get(`${BASE_URL}/services`).then((res) => setServices(res.data));
+    axios.get("/api/careers").then((res) => setCareers(res.data));
+   
+  }, []);
+ console.log(services);
   const [text] = useTypewriter({
     words: [
       "Welcome to Softwizpro LTD",
@@ -96,7 +120,7 @@ export default function LandingPage() {
             Our Services
           </h2>
           <div className="row gy-4">
-            {[
+            {/* {[
               {
                 title: "Point of Sale (POS) Systems",
                 img: "https://www.bing.com/th/id/OIP.Feiaak4bnTAiwT3sAL2GfQHaEy?w=244&h=211&c=8&rs=1&qlt=90&o=6&pid=3.1&rm=2",
@@ -115,20 +139,18 @@ export default function LandingPage() {
                 desc: "Track finances, automate invoicing, and generate insightful reports effortlessly.",
                 link: "/services/accounting",
               },
-            ].map((service, index) => (
+            ] */}
+            {services.map((service, index) => (
               <div className="col-md-4" key={index}>
                 <div className="card-hover bg-dark text-white p-3 h-100 rounded shadow">
                   <img
-                    src={service.img}
+                    src={`https://softwizpro-website-backend.onrender.com/uploads/${service.photos[0]}`}
                     alt={service.title}
                     className="img-fluid mb-3 rounded shadow"
                   />
                   <h5>{service.title}</h5>
-                  <p>{service.desc}</p>
-                  <a
-                    href={service.link}
-                    className="btn btn-outline-warning btn-sm mt-2"
-                  >
+                  <p>{service.shortDescription}</p>
+                  <a href="" className="btn btn-outline-warning btn-sm mt-2">
                     Read More
                   </a>
                 </div>

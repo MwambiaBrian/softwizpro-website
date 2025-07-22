@@ -22,7 +22,7 @@ export class Service {
   faqs: { question: string; answer: string }[];
 
   @Prop([String])
-  photos: string[]; // filenames
+  photos: string[]; 
 }
 
 export const ServiceSchema = SchemaFactory.createForClass(Service);

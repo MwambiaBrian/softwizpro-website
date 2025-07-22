@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import {
   FaTachometerAlt,
@@ -6,10 +7,13 @@ import {
   FaComments,
   FaArrowLeft,
   FaUserCircle,
+  FaBars,
 } from "react-icons/fa";
 import "./css/Admin.css";
 
 export default function AdminLayout() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
     <div className="admin-dashboard d-flex flex-column min-vh-100">
       {/* Top Navbar */}
@@ -17,10 +21,19 @@ export default function AdminLayout() {
         className="navbar navbar-expand-lg navbar-dark fixed-top"
         style={{ backgroundColor: "#5F9EA0" }}
       >
-        <div className="container d-flex justify-content-between">
-          <a className="navbar-brand fw-bold text-white" href="#">
-            Softwizpro
-          </a>
+        <div className="container d-flex justify-content-between align-items-center">
+          <div className="d-flex align-items-center">
+            {/* Toggle Sidebar Button */}
+            <button
+              className="btn btn-outline-light me-3 d-lg-none"
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+            >
+              <FaBars />
+            </button>
+            <a className="navbar-brand fw-bold text-white" href="#">
+              Softwizpro
+            </a>
+          </div>
 
           {/* Profile Dropdown */}
           <div className="dropdown">
@@ -63,13 +76,22 @@ export default function AdminLayout() {
 
       {/* Layout Body */}
       <div
-        className="d-flex flex-grow-1 overflow-hidden pt-5"
-        style={{ marginTop: "0px" }}
+        className="d-flex flex-grow-1 pt-5"
+        style={{}} // height of fixed navbar
       >
         {/* Sidebar */}
         <aside
-          className="admin-sidebar p-3 text-white"
-          style={{ marginTop: "0" }}
+          className={`admin-sidebar p-3 text-white bg-dark position-fixed h-100 d-lg-block ${
+            sidebarOpen ? "d-block" : "d-none"
+          }`}
+          style={{
+            width: "150px",
+            marginRight: "200px",
+            zIndex: 1030,
+            top: "",
+            left: 0,
+            overflowY: "auto",
+          }}
         >
           <h4 className="mb-4 text-orange">Admin Panel</h4>
           <nav className="nav flex-column">
@@ -111,8 +133,16 @@ export default function AdminLayout() {
           </nav>
         </aside>
 
-        {/* Main content */}
-        <main className="flex-grow-1 bg-light p-4">
+        {/* Main Content */}
+        <main
+          className="flex-grow-1 bg-light p-4"
+          style={{
+            marginLeft: "20px",
+            marginTop: "56px",
+
+            width: "100%",
+          }}
+        >
           <Outlet />
         </main>
       </div>

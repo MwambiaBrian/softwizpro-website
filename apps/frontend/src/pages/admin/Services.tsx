@@ -14,6 +14,7 @@ const ServiceList = () => {
       try {
         const response = await axios.get(`${BASE_URL}/services`);
         setServices(response.data);
+        console.log(response.data);
       } catch (err) {
         //  setError("Failed to load services.");
         console.error(err);
@@ -38,7 +39,7 @@ const ServiceList = () => {
   };
 
   return (
-    <div className="container py-5">
+    <div className="container py-5" style={{ marginLeft: "100px" }}>
       <h2 className="mb-4 fw-bold" style={{ color: "orange" }}>
         Services Offered Management
       </h2>
