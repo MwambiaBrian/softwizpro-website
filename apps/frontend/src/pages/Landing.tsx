@@ -33,9 +33,9 @@ export default function LandingPage() {
   useEffect(() => {
     axios.get(`${BASE_URL}/services`).then((res) => setServices(res.data));
     axios.get("/api/careers").then((res) => setCareers(res.data));
-   
   }, []);
- console.log(services);
+  console.log(services);
+  console.log(careers);
   const [text] = useTypewriter({
     words: [
       "Welcome to Softwizpro LTD",
