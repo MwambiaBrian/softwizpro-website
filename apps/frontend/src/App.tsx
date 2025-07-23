@@ -20,6 +20,7 @@ import ApplicationsList from "./pages/admin/applications/ApplicationList";
 import JobCreate from "./pages/admin/jobs/JobCreate";
 import { UserProvider } from "./contexts/UserContext";
 import TestimonialsTable from "./pages/admin/testimonials/Testimonials";
+import EditServiceForm from "./pages/admin/services/EditServiceForm";
 
 export default function App() {
   return (
@@ -40,6 +41,7 @@ export default function App() {
             <Route path="/admin" element={<AdminLayout />}>
               <Route path="dashboard" element={<AdminHome />} />
               <Route path="services" element={<AdminServices />} />
+              <Route path="services/edit/:id" element={<EditServiceForm />} />
               <Route path="services/create" element={<AddServiceForm />} />
               <Route path="careers" element={<AdminJobList />} />
               <Route path="testimonials" element={<TestimonialsTable />} />
