@@ -35,4 +35,7 @@ export class TestimonialService {
     const deleted = await this.model.findByIdAndDelete(id);
     if (!deleted) throw new NotFoundException('Testimonial not found');
   }
+  async updateStatus(id: string, status: string) {
+    return this.model.findByIdAndUpdate(id, { status }, { new: true });
+  }
 }

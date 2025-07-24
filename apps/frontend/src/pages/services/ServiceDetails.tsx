@@ -20,13 +20,14 @@ interface Service {
 }
 
 export default function ServiceDetail() {
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
   const { serviceId } = useParams<{ serviceId: string }>();
   const [services, setServices] = useState<Service[]>([]);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
 
   useEffect(() => {
     axios
-      .get("https://softwizpro-website-backend.onrender.com/services")
+      .get(`${BASE_URL}/services`)
       .then((res) => {
         setServices(res.data.reverse()); // newest first
       })
@@ -51,7 +52,7 @@ export default function ServiceDetail() {
                 <p className="lead">{selectedService.description}</p>
                 {selectedService.photos?.[0] && (
                   <img
-                    src={`https://softwizpro-website-backend.onrender.com/uploads/services/${selectedService.photos[0]}`}
+                    src={`${BASE_URL}/uploads/services/${selectedService.photos[0]}`}
                     alt={selectedService.title}
                     className="img-fluid rounded shadow mt-3"
                     style={{ maxHeight: "300px" }}

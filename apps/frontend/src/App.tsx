@@ -21,6 +21,12 @@ import JobCreate from "./pages/admin/jobs/JobCreate";
 import { UserProvider } from "./contexts/UserContext";
 import TestimonialsTable from "./pages/admin/testimonials/Testimonials";
 import EditServiceForm from "./pages/admin/services/EditServiceForm";
+import JobEdit from "./pages/admin/jobs/JobEdit";
+import AdminUsers from "./pages/admin/users/AdminUsers";
+import AdminUserManager from "./pages/admin/users/AdminUsers";
+import ActivateAccount from "./pages/ActivateAccount";
+import RequestPasswordReset from "./pages/RequestPasswordReset";
+import ResetPassword from "./pages/ResetPassword";
 
 export default function App() {
   return (
@@ -36,6 +42,9 @@ export default function App() {
             <Route path="/services/:serviceId" element={<ServiceDetail />} />
             <Route path="/careers" element={<JobList />} />
             <Route path="/careers/:jobId" element={<JobDetail />} />
+            <Route path="/activate/:token" element={<ActivateAccount />} />
+            <Route path="/request-reset" element={<RequestPasswordReset />} />
+            <Route path="/reset-password/:token" element={<ResetPassword />} />
 
             {/* Admin Routes */}
             <Route path="/admin" element={<AdminLayout />}>
@@ -46,10 +55,12 @@ export default function App() {
               <Route path="careers" element={<AdminJobList />} />
               <Route path="testimonials" element={<TestimonialsTable />} />
               <Route path="jobs/create" element={<JobCreate />} />
+              <Route path="jobs/edit/:id" element={<JobEdit />} />
               <Route
                 path="jobs/:jobId/applications"
                 element={<ApplicationsList />}
               />
+              <Route path="users" element={<AdminUserManager />} />
             </Route>
           </Routes>
         </UserProvider>

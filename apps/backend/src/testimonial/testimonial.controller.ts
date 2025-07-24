@@ -6,10 +6,12 @@ import {
   Param,
   Delete,
   Put,
+  Patch,
 } from '@nestjs/common';
 import { TestimonialService } from './testimonial.service';
 import { CreateTestimonialDto } from './dtos/create-testimonial.dto';
 import { UpdateTestimonialDto } from './dtos/update-testimonial.dto';
+import { UpdateStatusDto } from './dtos/update-status.dto';
 
 @Controller('testimonials')
 export class TestimonialController {
@@ -34,7 +36,10 @@ export class TestimonialController {
   update(@Param('id') id: string, @Body() dto: UpdateTestimonialDto) {
     return this.service.update(id, dto);
   }
-
+  @Patch(':id/status')
+  updateStatus(@Param('id') id: string, @Body() dto: UpdateStatusDto) {
+    return this.service.updateStatus(id, dto.status);
+  }
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.service.remove(id);

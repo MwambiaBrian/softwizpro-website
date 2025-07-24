@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Layout from "../../components/Layout";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -15,6 +15,8 @@ interface Job {
 }
 
 export default function JobDetail() {
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
+  const navigate = useNavigate();
   const { jobId } = useParams<{ jobId: string }>();
   const [jobs, setJobs] = useState<Job[]>([]);
   const [formData, setFormData] = useState({
@@ -25,7 +27,7 @@ export default function JobDetail() {
 
   useEffect(() => {
     axios
-      .get("https://softwizpro-website-backend.onrender.com/job-posting")
+      .get(`${BASE_URL}/job-posting`)
       .then((res) => setJobs(res.data))
       .catch((err) => console.error("Error fetching jobs:", err));
   }, []);
@@ -40,11 +42,33 @@ export default function JobDetail() {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Submitted:", formData);
-    alert("Application submitted successfully!");
-    // Submit to backend
+
+    if (!formData.resume || !jobId) {
+      alert("Please upload a resume and make sure job ID is valid.");
+      return;
+    }
+
+    const data = new FormData();
+    data.append("name", formData.name);
+    data.append("email", formData.email);
+    data.append("resume", formData.resume);
+    data.append("jobId", jobId);
+
+    try {
+      await axios.post(`${BASE_URL}/job-application`, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      alert("Application submitted successfully!");
+      navigate("/careers");
+    } catch (err) {
+      console.error("Submission failed:", err);
+      alert("Failed to submit application. Try again.");
+    }
   };
 
   if (!selectedJob) {

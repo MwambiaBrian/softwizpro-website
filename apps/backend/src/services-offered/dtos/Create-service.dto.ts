@@ -38,4 +38,7 @@ export class CreateServiceDto {
   @ValidateNested({ each: true })
   @Type(() => FaqDto)
   faqs: FaqDto[];
+  @IsArray()
+  @IsString({ each: true })
+  photos?: string[];
 }

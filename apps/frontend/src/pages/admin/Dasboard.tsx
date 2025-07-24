@@ -48,13 +48,15 @@ export default function AdminHome() {
 
         {/* Users */}
         <div className="col-sm-6 col-md-4 col-lg-3 mb-4">
-          <div className="card text-white bg-info h-100 shadow-sm">
-            <div className="card-body text-center d-flex flex-column align-items-center justify-content-center">
-              <FaUsers size={40} className="mb-3" />
-              <h5 className="card-title">Users</h5>
-              <p className="card-text">View and manage user accounts.</p>
+          <Link to="/admin/users" className="text-decoration-none">
+            <div className="card text-white bg-info h-100 shadow-sm">
+              <div className="card-body text-center d-flex flex-column align-items-center justify-content-center">
+                <FaUsers size={40} className="mb-3" />
+                <h5 className="card-title">Users</h5>
+                <p className="card-text">View and manage user accounts.</p>
+              </div>
             </div>
-          </div>
+          </Link>
         </div>
 
         {/* Testimonials */}

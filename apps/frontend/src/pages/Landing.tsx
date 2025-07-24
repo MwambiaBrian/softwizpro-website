@@ -64,10 +64,14 @@ export default function LandingPage() {
   useEffect(() => {
     axios.get(`${BASE_URL}/services`).then((res) => setServices(res.data));
     axios.get(`${BASE_URL}/job-posting`).then((res) => setCareers(res.data));
-    axios
-      .get(`${BASE_URL}/testimonials`)
-      .then((res) => setTestimonials(res.data));
+    axios.get(`${BASE_URL}/testimonials`).then((res) => {
+      const approvedTestimonials = res.data.filter(
+        (t: any) => t.status === "approved"
+      );
+      setTestimonials(approvedTestimonials);
+    });
   }, []);
+
   console.log(services);
   console.log(careers);
   const [text] = useTypewriter({
@@ -148,6 +152,15 @@ export default function LandingPage() {
           <p className="lead text-light">
             We build world-class software for businesses.
           </p>
+          <div className="mt-3">
+            {[...Array(5)].map((_, i) => (
+              <i key={i} className="bi bi-star-fill text-warning fs-4 mx-1"></i>
+            ))}
+            <p className="text-light small mt-2">
+              Rated 5.0 by our happy clients
+            </p>
+          </div>
+
           <a
             href={isLoggedIn ? "#services" : "#signup-cta"}
             className="btn btn-orange mt-3"
@@ -180,7 +193,7 @@ export default function LandingPage() {
               <div className="col-md-4" key={index}>
                 <div className="card-hover bg-dark text-white p-3 h-100 rounded shadow">
                   <img
-                    src={`https://softwizpro-website-backend.onrender.com/uploads/services/${service.photos[0]}`}
+                    src={`${BASE_URL}/uploads/services/${service.photos[0]}`}
                     alt={service.title}
                     className="img-fluid mb-3 rounded shadow"
                   />

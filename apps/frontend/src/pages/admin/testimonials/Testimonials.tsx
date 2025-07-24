@@ -13,6 +13,7 @@ interface Testimonial {
 }
 
 export default function TestimonialsTable() {
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -22,9 +23,7 @@ export default function TestimonialsTable() {
 
   const fetchTestimonials = async () => {
     try {
-      const res = await axios.get(
-        "https://softwizpro-website-backend.onrender.com/testimonials"
-      );
+      const res = await axios.get(`${BASE_URL}/testimonials`);
       setTestimonials(res.data);
     } catch (err) {
       console.error("Error fetching testimonials:", err);
@@ -38,10 +37,9 @@ export default function TestimonialsTable() {
     newStatus: "approved" | "rejected"
   ) => {
     try {
-      await axios.patch(
-        `https://softwizpro-website-backend.onrender.com/testimonials/${id}`,
-        { status: newStatus }
-      );
+      await axios.patch(`${BASE_URL}/testimonials/${id}/status`, {
+        status: newStatus,
+      });
       setTestimonials((prev) =>
         prev.map((t) => (t._id === id ? { ...t, status: newStatus } : t))
       );

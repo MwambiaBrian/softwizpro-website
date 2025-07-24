@@ -105,7 +105,7 @@ const EditServiceForm: React.FC = () => {
 
     try {
       const res = await fetch(`${BASE_URL}/services/${id}`, {
-        method: "PATCH",
+        method: "PUT",
         body: form,
       });
 

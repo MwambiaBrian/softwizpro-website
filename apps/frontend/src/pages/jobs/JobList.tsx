@@ -1,32 +1,27 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Layout from "../../components/Layout";
+import axios from "axios";
 
-// Sample job data
-const jobs = [
-  {
-    id: "frontend-developer",
-    title: "Frontend Developer",
-    location: "Remote",
-    type: "Full-Time",
-    summary: "We’re looking for a frontend developer with React experience.",
-  },
-  {
-    id: "backend-engineer",
-    title: "Backend Engineer",
-    location: "Lagos, Nigeria",
-    type: "Full-Time",
-    summary: "Join us to build scalable backend systems using Node.js.",
-  },
-  {
-    id: "ui-ux-designer",
-    title: "UI/UX Designer",
-    location: "Remote",
-    type: "Contract",
-    summary: "Design intuitive user interfaces and smooth user journeys.",
-  },
-];
+interface Job {
+  _id: string;
+  title: string;
+  location: string;
+  employmentType: string;
+  description: string;
+}
 
 export default function JobList() {
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
+  const [jobs, setJobs] = useState<Job[]>([]);
+
+  useEffect(() => {
+    axios
+      .get(`${BASE_URL}/job-posting`)
+      .then((res) => setJobs(res.data))
+      .catch((err) => console.error("Error fetching jobs:", err));
+  }, []);
+
   return (
     <Layout>
       <section
@@ -38,19 +33,19 @@ export default function JobList() {
 
           <div className="row g-4">
             {jobs.map((job) => (
-              <div className="col-md-6" key={job.id}>
+              <div className="col-md-6" key={job._id}>
                 <div className="bg-dark p-4 rounded shadow h-100">
                   <h4 className="text-warning">{job.title}</h4>
                   <p className="mb-1">
                     <strong>Location:</strong> {job.location}
                   </p>
                   <p className="mb-2">
-                    <strong>Type:</strong> {job.type}
+                    <strong>Type:</strong> {job.employmentType}
                   </p>
-                  <p>{job.summary}</p>
+                  <p>{job.description.slice(0, 100)}...</p>
 
                   <Link
-                    to={`/careers/${job.id}`}
+                    to={`/careers/${job._id}`}
                     className="btn btn-outline-warning btn-sm"
                   >
                     See More

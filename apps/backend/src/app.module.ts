@@ -10,6 +10,8 @@ import { join } from 'path';
 import { JobPostingModule } from './job-posting/job-posting.module';
 import { TestimonialModule } from './testimonial/testimonial.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JobApplicationModule } from './job-application/job-application.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -19,16 +21,18 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        uri: configService.get<string>('MONGO_URL'),
+        uri: configService.get<string>('LOCAL_DATABASE'),
       }),
       inject: [ConfigService],
     }),
- 
+
     AuthModule,
     UsersModule,
     ServicesOfferedModule,
     JobPostingModule,
     TestimonialModule,
+    JobApplicationModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [AppService],
