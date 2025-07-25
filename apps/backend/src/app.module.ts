@@ -12,6 +12,7 @@ import { TestimonialModule } from './testimonial/testimonial.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JobApplicationModule } from './job-application/job-application.module';
 import { MailModule } from './mail/mail.module';
+import { MpesaModule } from './mpesa/mpesa.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { MailModule } from './mail/mail.module';
     TestimonialModule,
     JobApplicationModule,
     MailModule,
+    MpesaModule,
   ],
   controllers: [AppController],
   providers: [AppService],
