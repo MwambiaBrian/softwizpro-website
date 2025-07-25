@@ -12,7 +12,7 @@ export class MailService {
   });
 
   async sendActivationEmail(email: string, token: string) {
-    const link = `http://localhost:5173/activate/${token}`;
+    const link = `${process.env.FRONTED_URL}/activate/${token}`;
     await this.transporter.sendMail({
       to: email,
       subject: 'Activate Your Account',
@@ -21,7 +21,7 @@ export class MailService {
   }
 
   async sendResetEmail(email: string, token: string) {
-    const link = `http://localhost:5173/reset-password/${token}`;
+    const link = `${process.env.FRONTED_URL}/reset-password/${token}`;
     await this.transporter.sendMail({
       to: email,
       subject: 'Reset Your Password',

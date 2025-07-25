@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const ActivateAccount: React.FC = () => {
   const { token } = useParams<{ token: string }>();
+  const navigate = useNavigate();
   const [status, setStatus] = useState("");
 
   useEffect(() => {
@@ -11,16 +12,22 @@ const ActivateAccount: React.FC = () => {
 
     axios
       .put(`${import.meta.env.VITE_BASE_URL}/users/activate/${token}`)
-      .then(() => setStatus("success"))
+      .then(() => {
+        setStatus("success");
+        // Redirect to reset password page after 2 seconds
+        setTimeout(() => {
+          navigate(`/request-reset`);
+        }, 2000);
+      })
       .catch(() => setStatus("error"));
-  }, [token]);
+  }, [token, navigate]);
 
   return (
     <div className="container mt-5 text-center" style={{ maxWidth: "500px" }}>
       <h3 className="text-black fw-bold mb-3">Account Activation</h3>
       {status === "success" ? (
         <div className="alert alert-success">
-          Your account has been activated!
+          Your account has been activated! Redirecting to password reset...
         </div>
       ) : status === "error" ? (
         <div className="alert alert-danger">Invalid or expired token.</div>

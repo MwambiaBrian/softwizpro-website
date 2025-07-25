@@ -22,7 +22,7 @@ import { UserProvider } from "./contexts/UserContext";
 import TestimonialsTable from "./pages/admin/testimonials/Testimonials";
 import EditServiceForm from "./pages/admin/services/EditServiceForm";
 import JobEdit from "./pages/admin/jobs/JobEdit";
-import AdminUsers from "./pages/admin/users/AdminUsers";
+
 import AdminUserManager from "./pages/admin/users/AdminUsers";
 import ActivateAccount from "./pages/ActivateAccount";
 import RequestPasswordReset from "./pages/RequestPasswordReset";

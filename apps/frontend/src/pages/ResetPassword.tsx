@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
 const ResetPassword: React.FC = () => {
   const { token } = useParams<{ token: string }>();
   const [newPassword, setNewPassword] = useState("");
   const [message, setMessage] = useState("");
+  const navigate = useNavigate();
 
   const handleReset = async () => {
     try {
@@ -16,6 +17,7 @@ const ResetPassword: React.FC = () => {
         }
       );
       setMessage("Password reset successfully.");
+      navigate("/login");
     } catch {
       setMessage("Failed to reset password.");
     }
