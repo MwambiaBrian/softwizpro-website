@@ -21,7 +21,7 @@ import { MailModule } from './mail/mail.module';
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        uri: configService.get<string>('LOCAL_DATABASE'),
+        uri: configService.get<string>('MONGO_URL'),
       }),
       inject: [ConfigService],
     }),
