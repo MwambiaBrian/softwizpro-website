@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { MpesaService } from './mpesa.service';
 import { C2BCallbackDto } from './dto/c2b-callback.dto';
 
@@ -11,5 +11,9 @@ export class MpesaController {
     const callbackData: C2BCallbackDto = body;
 
     return await this.mpesaService.handleMpesaCallback(callbackData);
+  }
+  @Get('payment/:orderId')
+  async getStatus(@Param('orderId') orderId: string) {
+    return this.mpesaService.getPaymentByOrderId(orderId);
   }
 }

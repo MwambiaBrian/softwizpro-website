@@ -1,7 +1,7 @@
-import { Injectable } from "@nestjs/common";
-import { InjectModel } from "@nestjs/mongoose";
-import { Payment, PaymentDocument } from "./schema/payment.schema";
-import { Model } from "mongoose";
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Payment, PaymentDocument } from './schema/payment.schema';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class MpesaService {
@@ -27,6 +27,8 @@ export class MpesaService {
       phoneNumber: getValue('PhoneNumber'),
       orderId: getValue('BillRefNumber'), // optionally passed in request
       status: callback.ResultCode === 0 ? 'success' : 'failed',
+      firstName: getValue('FirstName'),
+      lastName: getValue('LastName'),
       raw: data,
     });
 
@@ -38,5 +40,17 @@ export class MpesaService {
     }
 
     return { success: true };
+  }
+
+  async getPaymentByOrderId(orderId: string) {
+    const payment = await this.paymentModel
+      .findOne({ orderId })
+      .sort({ createdAt: -1 });
+
+    if (!payment) {
+      throw new NotFoundException('Payment not found');
+    }
+
+    return payment;
   }
 }
