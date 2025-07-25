@@ -23,7 +23,8 @@ export class Payment {
   @Prop({ default: 'pending' }) // success, failed, refunded
   status: string;
 
-  @Prop()
+  // ✅ Fix: Tell Mongoose this is a plain object
+  @Prop({ type: Object })
   raw: Record<string, any>;
 }
 
