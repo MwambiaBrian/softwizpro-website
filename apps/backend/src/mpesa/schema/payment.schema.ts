@@ -22,11 +22,6 @@ export class Payment {
 
   @Prop({ default: 'pending' }) // success, failed, refunded
   status: string;
-  @Prop()
-  firstName: string;
-
-  @Prop()
-  lastName: string;
 
   // ✅ Fix: Tell Mongoose this is a plain object
   @Prop({ type: Object })
