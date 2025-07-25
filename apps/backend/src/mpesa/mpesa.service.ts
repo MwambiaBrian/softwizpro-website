@@ -25,10 +25,11 @@ export class MpesaService {
       amount: getValue('Amount'),
       mpesaReceiptNumber: getValue('MpesaReceiptNumber'),
       phoneNumber: getValue('PhoneNumber'),
-      orderId: getValue('BillRefNumber'), // optionally passed in request
+      orderId: getValue('AccountReference'), // optionally passed in request
       status: callback.ResultCode === 0 ? 'success' : 'failed',
       firstName: getValue('FirstName'),
       lastName: getValue('LastName'),
+      
       raw: data,
     });
 
