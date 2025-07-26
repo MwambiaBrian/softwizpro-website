@@ -41,15 +41,20 @@ export class MpesaService {
     return { success: true };
   }
 
-  async getPaymentByOrderId(orderId: string) {
+  async getPayment() {
     const payment = await this.paymentModel
-      .findOne({ orderId })
-      .sort({ createdAt: -1 });
+      .find()
+      .sort({ createdAt: -1 })
+      .exec();
 
     if (!payment) {
       throw new NotFoundException('Payment not found');
     }
 
     return payment;
+  }
+  async remove(id: string): Promise<void> {
+    const deleted = await this.paymentModel.findByIdAndDelete(id);
+    if (!deleted) throw new NotFoundException('Testimonial not found');
   }
 }
