@@ -55,6 +55,6 @@ export class MpesaService {
   }
   async remove(id: string): Promise<void> {
     const deleted = await this.paymentModel.findByIdAndDelete(id);
-    if (!deleted) throw new NotFoundException('Testimonial not found');
+    if (!deleted) throw new NotFoundException('Payment not found');
   }
 }

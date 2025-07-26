@@ -6,7 +6,7 @@ import { C2BCallbackDto } from './dto/c2b-callback.dto';
 export class MpesaController {
   constructor(private readonly mpesaService: MpesaService) {}
 
-  @Post('c2b/callback')
+  @Post('payment/callback')
   async receiveC2BCallback(@Body() body: any) {
     const callbackData: C2BCallbackDto = body;
 
@@ -16,7 +16,7 @@ export class MpesaController {
   async getPayment() {
     return this.mpesaService.getPayment();
   }
-  @Delete(':id')
+  @Delete('payment/:id')
   remove(@Param('id') id: string) {
     return this.mpesaService.remove(id);
   }
